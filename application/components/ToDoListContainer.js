@@ -11,6 +11,8 @@ class ToDoContainer extends React.Component {
         this.state = {
             items: [
                 {txt: 'Learn react native', complete: false},
+                {txt: 'Learn react', complete: false},
+                {txt: 'Learn react', complete: true},
                 {txt: 'Make a to-do app', complete: true}
             ]
         };
