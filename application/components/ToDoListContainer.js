@@ -5,6 +5,15 @@ var ToDoList = require('./ToDoList');
 var ToDoEdit = require('./ToDoEdit');
 var { Text, View, ListView, TouchableHighlight, AsyncStorage, AlertIOS } = React;
 
+function dateReviver(key, value) {
+  if (typeof value === 'string') {
+    var a = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}(?:\.\d*)?)Z$/.exec(value);
+    if (a) {
+      return new Date(Date.UTC(+a[1], +a[2] - 1, +a[3], +a[4], +a[5], +a[6]));
+    }
+  }
+  return value;
+};
 
 const TODOLIST = "TODOLIST"
 
@@ -20,7 +29,7 @@ class ToDoContainer extends React.Component {
         var list = await AsyncStorage.getItem(TODOLIST);
         console.log(list)
         if (list !== null){
-          list= JSON.parse(list)
+          list= JSON.parse(list, dateReviver)
           this.setState({items: list});
           this._appendMessage('Recovered selection from disk: ' + list);
         } else {
@@ -53,7 +62,7 @@ class ToDoContainer extends React.Component {
     constructor() {
         super();
         this.state = {
-          items: [{txt: 'New Item', complete: false}],
+          items: [], //{txt: 'New Item', complete: false}
           messages: []
         }
         console.log("constructor")
@@ -90,6 +99,9 @@ class ToDoContainer extends React.Component {
         }
         else {
             items.push(item)
+        }
+        if (item.complete){
+          this.deleteItem(index)
         }
         // this.setState({items: items});
         this._onValueChange(items)

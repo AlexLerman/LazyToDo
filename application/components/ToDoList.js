@@ -17,13 +17,15 @@ class ToDoList extends React.Component {
         var dataSource = this.dataSource.cloneWithRows(this.props.items);
         return (
             <ListView
-                dataSource={dataSource}
-                renderRow={(rowData, sectionID, rowID) =>
-          <ToDoListItem item={rowData}
-          onPress={() => this.props.onPressItem(rowData, rowID)}
-          onLongPress={() => this.props.onLongPressItem(rowData, rowID)} />
-        }
-                style={styles.listView}/>
+              enableEmptySections={true}
+              dataSource={dataSource}
+              renderRow={(rowData, sectionID, rowID) =>
+                <ToDoListItem item={rowData}
+                  onPress={() => this.props.onPressItem(rowData, rowID)}
+                  onLongPress={() => this.props.onLongPressItem(rowData, rowID)} />
+              }
+              style={styles.listView}
+            />
         );
     }
 

@@ -5,7 +5,7 @@ var t = require('tcomb-form-native');
 var { View, TouchableHighlight, Text } = React;
 var Form = t.form.Form;
 
-var ToDo = t.struct({txt: t.Str, complete: t.Bool});
+var ToDo = t.struct({txt: t.Str, complete: t.Bool, date: t.Date});
 
 var options = {
     fields: {
@@ -13,9 +13,18 @@ var options = {
             label: 'To-Do Item',
             placeholder: 'enter a to do item here',
             autoFocus: true
+        },
+        date: {
+            label: 'Date',
+            mode: 'date',
+            config: {
+              format: (date) => ((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear())
+            }
         }
     }
 };
+
+
 
 class ToDoEdit extends React.Component {
     constructor() {
