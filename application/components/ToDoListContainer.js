@@ -3,19 +3,61 @@ var styles = require('../styles/styles');
 var React = require('react-native');
 var ToDoList = require('./ToDoList');
 var ToDoEdit = require('./ToDoEdit');
-var { Text, View, ListView, TouchableHighlight, AlertIOS } = React;
+var { Text, View, ListView, TouchableHighlight, AsyncStorage, AlertIOS } = React;
+
+
+const TODOLIST = "TODOLIST"
 
 class ToDoContainer extends React.Component {
+
+    componentDidMount() {
+      this._loadInitialState().done();
+    }
+
+    async _loadInitialState() {
+      console.log("loadInitialState")
+      try {
+        var list = await AsyncStorage.getItem(TODOLIST);
+        console.log(list)
+        if (list !== null){
+          list= JSON.parse(list)
+          this.setState({items: list});
+          this._appendMessage('Recovered selection from disk: ' + list);
+        } else {
+          // this.setState({items: []});
+          this._appendMessage('Initialized with no selection on disk.');
+        }
+      } catch (error) {
+        this._appendMessage('AsyncStorage error: ' + error.message);
+      }
+    }
+
+
+    _appendMessage(message) {
+      this.setState({messages: this.state.messages.concat(message)});
+    }
+
+    async _onValueChange(items) {
+      console.log(items)
+      this.setState({items: items});
+      try {
+        items = JSON.stringify(items)
+        await AsyncStorage.setItem(TODOLIST, items);
+        this._appendMessage('Saved selection to disk: ' + items);
+      } catch (error) {
+        this._appendMessage('AsyncStorage error: ' + error.message);
+      }
+    }
+
+
     constructor() {
         super();
         this.state = {
-            items: [
-                {txt: 'Learn react native', complete: false},
-                {txt: 'Learn react', complete: false},
-                {txt: 'Learn react', complete: true},
-                {txt: 'Make a to-do app', complete: true}
-            ]
-        };
+          items: [{txt: 'New Item', complete: false}],
+          messages: []
+        }
+        console.log("constructor")
+        console.log(this.state)
         this.alertMenu = this.alertMenu.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.updateItem = this.updateItem.bind(this);
@@ -38,7 +80,7 @@ class ToDoContainer extends React.Component {
     deleteItem(index) {
         var items = this.state.items;
         items.splice(index, 1);
-        this.setState({items: items})
+        this._onValueChange(items)
     }
 
     updateItem(item, index) {
@@ -49,7 +91,8 @@ class ToDoContainer extends React.Component {
         else {
             items.push(item)
         }
-        this.setState({items: items});
+        // this.setState({items: items});
+        this._onValueChange(items)
         this.props.navigator.pop();
     }
 
