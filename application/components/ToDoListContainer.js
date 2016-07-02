@@ -24,10 +24,8 @@ class ToDoContainer extends React.Component {
     }
 
     async _loadInitialState() {
-      console.log("loadInitialState")
       try {
         var list = await AsyncStorage.getItem(TODOLIST);
-        console.log(list)
         if (list !== null){
           list= JSON.parse(list, dateReviver)
           this.setState({items: list});
@@ -47,7 +45,6 @@ class ToDoContainer extends React.Component {
     }
 
     async _onValueChange(items) {
-      console.log(items)
       this.setState({items: items});
       try {
         items = JSON.stringify(items)
@@ -65,8 +62,6 @@ class ToDoContainer extends React.Component {
           items: [], //{txt: 'New Item', complete: false}
           messages: []
         }
-        console.log("constructor")
-        console.log(this.state)
         this.alertMenu = this.alertMenu.bind(this);
         this.deleteItem = this.deleteItem.bind(this);
         this.updateItem = this.updateItem.bind(this);
@@ -95,15 +90,17 @@ class ToDoContainer extends React.Component {
     updateItem(item, index) {
         var items = this.state.items;
         if (index) {
+          if (item.complete){
+            this.deleteItem(index)
+          }else{
             items[index] = item;
+          }
         }
         else {
+          if (!item.complete){
             items.push(item)
+          }
         }
-        if (item.complete){
-          this.deleteItem(index)
-        }
-
         items.sort(function(a,b){
           return a.date - b.date;
         });

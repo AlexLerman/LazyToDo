@@ -17,6 +17,7 @@ var options = {
         date: {
             label: 'Date',
             mode: 'date',
+            minimumDate: new Date(),
             config: {
               format: (date) => ((date.getMonth() + 1) + '/' + date.getDate() + '/' +  date.getFullYear())
             }
