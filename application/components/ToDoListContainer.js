@@ -103,6 +103,10 @@ class ToDoContainer extends React.Component {
         if (item.complete){
           this.deleteItem(index)
         }
+
+        items.sort(function(a,b){
+          return a.date - b.date;
+        });
         // this.setState({items: items});
         this._onValueChange(items)
         this.props.navigator.pop();
