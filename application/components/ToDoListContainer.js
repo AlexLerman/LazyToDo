@@ -52,7 +52,7 @@ class ToDoContainer extends React.Component {
         var list = await AsyncStorage.getItem(TODOLIST);
         if (list !== null){
           list = JSON.parse(list, dateReviver)
-          list = this.getItems(list, this.props.title)
+          // list = this.getItems(list, this.props.title)
           this.setState({items: list});
           this._appendMessage('Recovered selection from disk: ' + list);
         } else {
@@ -129,7 +129,7 @@ class ToDoContainer extends React.Component {
         });
         // this.setState({items: items});
         var items_clone  = _.clone(items)
-        items_clone = this.getItems(items, this.props.title)
+        // items_clone = this.getItems(items, this.props.title)
         this.setState({items: items_clone});
         this._onValueChange(items)
         this.props.navigator.pop();
@@ -247,7 +247,7 @@ class ToDoContainer extends React.Component {
 
               <View style={styles.scrollView}>
                     <ToDoList
-                      items={this.state.items}
+                      items={this.getItems(this.state.items, this.props.title)}
                       onPressItem={this.openItem}
                       onLongPressItem={this.alertMenu}
                       style={styles.scrollView}
