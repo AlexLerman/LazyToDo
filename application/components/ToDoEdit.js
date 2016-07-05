@@ -86,29 +86,16 @@ class ToDoEdit extends React.Component {
         super();
         this.state = {date: new Date()};
         this.onUpdate = this.onUpdate.bind(this);
-        this.updateSelectDate = this.updateSelectDate.bind(this);
 
-        // this._displayDate = this._displayDate.bind(this);
     }
 
     onUpdate() {
         var value = this.refs.form.getValue();
 
         if (value) {
-            console.log(this.state.date)
             var to_save = convertDate(value, selectedDate)
             this.props.update(to_save, this.props.id);
         }
-    }
-
-    updateSelectDate(){
-      // var value = this.refs.form.getValue();
-      // if (value.datetype === "SelectDate"){
-        this.setState({selectDate: true});
-      // }else{
-      //   this.setState({selectDate: false});
-      // }
-
     }
 
 

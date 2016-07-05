@@ -47,9 +47,11 @@ class ToDoContainer extends React.Component {
 
     async _loadInitialState() {
       try {
+        console.log("Load initial State")
         var list = await AsyncStorage.getItem(TODOLIST);
         if (list !== null){
-          list= JSON.parse(list, dateReviver)
+          list = JSON.parse(list, dateReviver)
+          list = this.getItems(list, this.props.title)
           this.setState({items: list});
           this._appendMessage('Recovered selection from disk: ' + list);
         } else {
@@ -67,7 +69,6 @@ class ToDoContainer extends React.Component {
     }
 
     async _onValueChange(items) {
-      this.setState({items: items});
       try {
         items = JSON.stringify(items)
         await AsyncStorage.setItem(TODOLIST, items);
@@ -111,16 +112,24 @@ class ToDoContainer extends React.Component {
 
     updateItem(item, index) {
         var items = this.state.items;
+        console.log("Update Item at index: ")
+        console.log(index)
+        console.log(item)
         if (index) {
+          console.log("replacing")
+          console.log(items[index])
           items[index] = item;
-        }
-        else {
+        }else {
+          console.log("new item")
           items.push(item)
         }
         items.sort(function(a,b){
           return a.endDate - b.endDate;
         });
         // this.setState({items: items});
+        var items_clone  = _.clone(items)
+        items_clone = this.getItems(items, this.props.title)
+        this.setState({items: items_clone});
         this._onValueChange(items)
         this.props.navigator.pop();
     }
@@ -142,13 +151,13 @@ class ToDoContainer extends React.Component {
       }
     }
 
-    getItems(filter){
-      // console.log(this.state.items)
+    getItems(items, filter){
+      // console.log(items)
       console.log("Get Items: "+filter)
       switch (filter){
         case "Today":
           var today = (new Date()).roundedDay()
-          var filtered = _.filter(this.state.items, function(i){
+          var filtered = _.filter(items, function(i){
             if (i.startDate !== null && i.startDate !== undefined){
               return today >= i.startDate.roundedDay() && today <= i.endDate.roundedDay() && !i.complete
             }else{
@@ -157,10 +166,10 @@ class ToDoContainer extends React.Component {
           })
           return filtered
         case "All":
-          return this.state.items
+          return items
         case "Tomorrow":
           var today = (new Date()).addDays(1).roundedDay()
-          var filtered = _.filter(this.state.items, function(i){
+          var filtered = _.filter(items, function(i){
             if (i.startDate !== null && i.startDate !== undefined){
               return today >= i.startDate.roundedDay() && today <= i.endDate.roundedDay() && !i.complete
             }else{
@@ -169,16 +178,14 @@ class ToDoContainer extends React.Component {
           })
           return filtered
         case "Completed":
-          var filtered = _.where(this.state.items, {complete: true})
+          var filtered = _.where(items, {complete: true})
           console.log(filtered)
           return filtered
       }
     }
 
     onActionSelected() {
-      // if (position === 0) { // index of 'Settings'
       this.refs['DRAWER'].openDrawer()
-      // }
     }
 
     navigate(route_id){
@@ -189,22 +196,8 @@ class ToDoContainer extends React.Component {
                   component: ToDoContainer,
                   passProps: {navigator: _navigator, id: route_id}
       });
-      // this.props.navigator.push({id: route_id})
     }
-    // style = {styles.toolbar}
-    // title="Today"
-    // actions={[{title: 'Drawer', icon: require('../ic_menu_white_48dp.png'), show: 'always'}]}
-    // onActionSelected={this.onActionSelected}
 
-                  // actions={[{title: 'Drawer', icon: require('../ic_menu_white_24dp.png'), show: 'always'}]}
-                  // onActionSelected={this.onActionSelected}
-//
-// onPress={}
-// onPress={this.props.navigator.push({id: "Inbox"})}
-// _navigator = this.props.navigator
-// <TouchableHighlight>
-//   <Image source={require('../ic_menu_white_48dp.png')} style={styles.menuButton} />
-// </TouchableHighlight>
     render() {
       _navigator = this.props.navigator
 
@@ -243,7 +236,7 @@ class ToDoContainer extends React.Component {
 
               <View style={styles.scrollView}>
                     <ToDoList
-                      items={this.getItems(this.props.title)}
+                      items={this.state.items}
                       onPressItem={this.openItem}
                       onLongPressItem={this.alertMenu}
                       style={styles.scrollView}
