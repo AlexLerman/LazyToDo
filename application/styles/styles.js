@@ -1,19 +1,113 @@
 'use strict';
 var React = require('react-native');
-var { StyleSheet } = React;
+var { StyleSheet, PixelRatio } = React;
+var {MKColor} = require('react-native-material-kit');
+
+var navHeight = 56
 
 var styles = StyleSheet.create({
 
-    navigator: {flex: 1},
+    navigator: {
+      height: navHeight,
+      backgroundColor: MKColor.DeepPurple,
+      paddingLeft: 16,
+      paddingRight: 16,
+      elevation: 4
+
+    },
+
+    navBarText: {
+      color:'#ffffff',
+      fontSize: 20,
+      // paddingLeft: 72,
+      paddingBottom: 14,
+      // paddingTop: ,
+      // marginBottom: 20,
+
+      textAlignVertical: 'bottom',
+      // fontStyle enum('normal', 'italic')
+
+    },
+
+    menuButton: {
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      height: 24,
+      width: 24,
+      // paddingLeft: 16,
+      // paddingBottom: 16,
+      // paddingTop: 16,
+      // marginLeft: ,
+      marginBottom: 16,
+      marginTop: 16,
+    },
 
     container: {
         flex: 1,
         flexDirection: 'column',
-        justifyContent: 'center',
+        // justifyContent: 'center',
         alignItems: 'flex-start',
         padding: 10,
         backgroundColor: '#ffffff',
     },
+
+    scrollView: {
+      flex: 1,
+      // marginTop: navHeight
+    },
+
+    listView: {
+      flex: 1
+    },
+  // container: {
+  //   flex: 1,
+  //   alignItems: 'stretch',
+  //   backgroundColor: '#F5FCFF',
+  //   padding: 20,
+  //   marginTop: Platform.OS === 'android' ? 56 : 0,
+  // },
+  row: {
+    flexDirection: 'row',
+  },
+  col: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginLeft: 7, marginRight: 7,
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginTop: 10, marginBottom: 20,
+  },
+  legendLabel: {
+    textAlign: 'center',
+    color: '#666666',
+    marginTop: 10, marginBottom: 20,
+    fontSize: 12,
+    fontWeight: '300',
+  },
+
+    fabView: {
+      elevation: 12,
+      position: 'absolute',
+      bottom: 0,
+      right: 0
+    },
+
+    fab: {
+      height: 56,
+      width: 56,
+      marginBottom: 24,
+      marginRight: 24
+    },
+
 
     buttonText: {
         fontSize: 18,
@@ -55,6 +149,12 @@ var styles = StyleSheet.create({
 
     completed: {
         color: '#cccccc'
+    },
+
+    date: {
+        marginTop: 5,
+        // marginRight: 5,
+        textAlign: 'right'
     },
 
     hr: {

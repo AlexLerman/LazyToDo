@@ -3,7 +3,15 @@ var styles = require('../styles/styles');
 var React = require('react-native');
 var ToDoList = require('./ToDoList');
 var ToDoEdit = require('./ToDoEdit');
-var { Text, View, ListView, TouchableHighlight, AsyncStorage, AlertIOS } = React;
+var MK = require('react-native-material-kit')
+var _ = require('underscore')
+
+var { Text, Image, View, ListView, TouchableHighlight, TouchableOpacity, AsyncStorage, AlertIOS, BackAndroid, ToolbarAndroid, DrawerLayoutAndroid } = React;
+
+const {
+  MKButton,
+  MKColor,
+} = MK;
 
 function dateReviver(key, value) {
   if (typeof value === 'string') {
@@ -15,7 +23,21 @@ function dateReviver(key, value) {
   return value;
 };
 
+
+const ColoredFab = MKButton.coloredFab().withStyle(styles.fab).build();
+
 const TODOLIST = "TODOLIST"
+
+
+var _navigator = null; // we fill this up upon on first navigation.
+
+BackAndroid.addEventListener('hardwareBackPress', () => {
+  if (!_navigator || _navigator.getCurrentRoutes().length === 1  ) {
+     return false;
+  }
+  _navigator.pop();
+  return true;
+});
 
 class ToDoContainer extends React.Component {
 
@@ -90,19 +112,13 @@ class ToDoContainer extends React.Component {
     updateItem(item, index) {
         var items = this.state.items;
         if (index) {
-          if (item.complete){
-            this.deleteItem(index)
-          }else{
-            items[index] = item;
-          }
+          items[index] = item;
         }
         else {
-          if (!item.complete){
-            items.push(item)
-          }
+          items.push(item)
         }
         items.sort(function(a,b){
-          return a.date - b.date;
+          return a.endDate - b.endDate;
         });
         // this.setState({items: items});
         this._onValueChange(items)
@@ -110,29 +126,152 @@ class ToDoContainer extends React.Component {
     }
 
     openItem(rowData, rowID) {
+        _navigator = this.props.navigator
         this.props.navigator.push({
             title: rowData && rowData.txt || 'New Item',
             component: ToDoEdit,
-            passProps: {item: rowData, id: rowID, update: this.updateItem}
+            passProps: {navigator: _navigator, item: rowData, id: rowID, update: this.updateItem}
         });
     }
 
+    filterItems(i){
+      if (i.startDate !== null && i.startDate !== undefined){
+        return today >= i.startDate.roundedDay() && today <= i.endDate.roundedDay()
+      }else{
+        return true
+      }
+    }
+
+    getItems(filter){
+      // console.log(this.state.items)
+      console.log("Get Items: "+filter)
+      switch (filter){
+        case "Today":
+          var today = (new Date()).roundedDay()
+          var filtered = _.filter(this.state.items, function(i){
+            if (i.startDate !== null && i.startDate !== undefined){
+              return today >= i.startDate.roundedDay() && today <= i.endDate.roundedDay() && !i.complete
+            }else{
+              return true
+            }
+          })
+          return filtered
+        case "All":
+          return this.state.items
+        case "Tomorrow":
+          var today = (new Date()).addDays(1).roundedDay()
+          var filtered = _.filter(this.state.items, function(i){
+            if (i.startDate !== null && i.startDate !== undefined){
+              return today >= i.startDate.roundedDay() && today <= i.endDate.roundedDay() && !i.complete
+            }else{
+              return true
+            }
+          })
+          return filtered
+        case "Completed":
+          var filtered = _.where(this.state.items, {complete: true})
+          console.log(filtered)
+          return filtered
+      }
+    }
+
+    onActionSelected() {
+      // if (position === 0) { // index of 'Settings'
+      this.refs['DRAWER'].openDrawer()
+      // }
+    }
+
+    navigate(route_id){
+      console.log("navigate: " +  route_id)
+      this.refs['DRAWER'].closeDrawer()
+      this.props.navigator.push({
+                  title: route_id,
+                  component: ToDoContainer,
+                  passProps: {navigator: _navigator, id: route_id}
+      });
+      // this.props.navigator.push({id: route_id})
+    }
+    // style = {styles.toolbar}
+    // title="Today"
+    // actions={[{title: 'Drawer', icon: require('../ic_menu_white_48dp.png'), show: 'always'}]}
+    // onActionSelected={this.onActionSelected}
+
+                  // actions={[{title: 'Drawer', icon: require('../ic_menu_white_24dp.png'), show: 'always'}]}
+                  // onActionSelected={this.onActionSelected}
+//
+// onPress={}
+// onPress={this.props.navigator.push({id: "Inbox"})}
+// _navigator = this.props.navigator
+// <TouchableHighlight>
+//   <Image source={require('../ic_menu_white_48dp.png')} style={styles.menuButton} />
+// </TouchableHighlight>
     render() {
+      _navigator = this.props.navigator
+
+      var navigationView = (
+          <View style={{flex: 1, backgroundColor: '#fff'}}>
+            <TouchableOpacity onPress={this.navigate.bind(this, "All")} >
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Inbox</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.navigate.bind(this, "Today")}>
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Today</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.navigate.bind(this, "Tomorrow")}>
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Tomorrow</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.navigate.bind(this, "Completed")}>
+                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Completed</Text>
+            </TouchableOpacity>
+          </View>
+      );
         return (
-            <View style={{flex:1}}>
-                <ToDoList
-                    items={this.state.items}
-                    onPressItem={this.openItem}
-                    onLongPressItem={this.alertMenu}/>
-                <TouchableHighlight
-                    style={[styles.button, styles.newButton]}
-                    underlayColor='#99d9f4'
-                    onPress={this.openItem}>
-                    <Text style={styles.buttonText}>+</Text>
-                </TouchableHighlight>
+          <DrawerLayoutAndroid
+            drawerWidth={300}
+            ref={'DRAWER'}
+            drawerPosition={DrawerLayoutAndroid.positions.Left}
+            renderNavigationView={() => navigationView}>
+            <View style={{flex: 1}}>
+              <ToolbarAndroid style={styles.navigator }
+                navIcon={require('../ic_menu_white_24dp/web/ic_menu_white_24dp_1x.png')}
+                titleColor='#FFFFFF'
+                title={this.props.title}
+                contentInsetStart={72}
+                onIconClicked={this.onActionSelected.bind(this)}
+              >
+
+              </ToolbarAndroid>
+
+              <View style={styles.scrollView}>
+                    <ToDoList
+                      items={this.getItems(this.props.title)}
+                      onPressItem={this.openItem}
+                      onLongPressItem={this.alertMenu}
+                      style={styles.scrollView}
+                    />
+              </View>
+
             </View>
+            <View style={styles.fabView}>
+              <ColoredFab
+              onPress={this.openItem}>
+                <Image pointerEvents="none" source={require('../plus.png')} style={{height: 24, width: 24}}/>
+              </ColoredFab>
+            </View>
+          </DrawerLayoutAndroid>
         );
     }
+
+
 }
+
+// <TouchableHighlight
+//     style={[styles.button, styles.newButton]}
+//     underlayColor='#99d9f4'
+//     onPress={this.openItem}>
+//     <Text style={styles.buttonText}>+</Text>
+// </TouchableHighlight>
+
+
+
 
 module.exports = ToDoContainer;

@@ -2,7 +2,19 @@
 var styles = require('../styles/styles');
 var React = require('react-native');
 var ToDoListItem = require('./ToDoListItem');
-var { ListView } = React;
+var { ListView, View } = React;
+var MK = require('react-native-material-kit')
+var _ = require('underscore')
+
+var { Text, Image, View, ListView, TouchableHighlight, AsyncStorage, AlertIOS, BackAndroid } = React;
+
+const {
+  MKButton,
+  MKColor,
+} = MK;
+
+
+const ColoredFab = MKButton.coloredFab().withStyle(styles.fab).build();
 
 
 class ToDoList extends React.Component {
