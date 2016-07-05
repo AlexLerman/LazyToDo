@@ -1,6 +1,10 @@
 'use strict';
 var styles = require('./application/styles/styles');
 var ToDoListContainer = require('./application/components/ToDoListContainer');
+var Transitions = require('./application/components/Transitions');
+console.log(Transitions)
+console.log(Transitions.default)
+
 var React = require('react-native');
 var { AppRegistry, Navigator, Text, Image, View, TouchableHighlight, DrawerLayoutAndroid, StatusBar} = React;
 var {MKColor} = require('react-native-material-kit');
@@ -89,9 +93,9 @@ class ToDoApp extends React.Component {
     }
 
     configureScene(route, routeStack){
-      // if (route.title === "Today" || route.title === "Tomorrow" || route.title === "All" || route.title === "Completed"){
-      //   return () => {}
-      // }
+      if (route.title === "Today" || route.title === "Tomorrow" || route.title === "All" || route.title === "Completed"){
+        return Transitions.default.none
+      }
       return Navigator.SceneConfigs.FadeAndroid
     }
 

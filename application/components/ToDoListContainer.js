@@ -211,19 +211,19 @@ class ToDoContainer extends React.Component {
               <Text style={{fontSize: 30, color: '#fff', marginTop: 33, marginLeft: 14}}>LazyToDo</Text>
             </View>
             <TouchableOpacity style={[styles.menuItem, selected === "All" && styles.selected]} onPress={this.navigate.bind(this, "All")} >
-                <Image source={require('../ic_inbox_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
+                <Image source={require('../images/ic_inbox_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>All</Text>
             </TouchableOpacity>
             <TouchableOpacity  style={[styles.menuItem, selected === "Today" && styles.selected]} onPress={this.navigate.bind(this, "Today")}>
-                <Image source={require('../ic_today_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
+                <Image source={require('../images/ic_today_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>Today</Text>
             </TouchableOpacity>
             <TouchableOpacity  style={[styles.menuItem, selected === "Tomorrow" && styles.selected]} onPress={this.navigate.bind(this, "Tomorrow")}>
-                <Image source={require('../ic_redo_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
+                <Image source={require('../images/ic_redo_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>Tomorrow</Text>
             </TouchableOpacity>
             <TouchableOpacity  style={[styles.menuItem, selected === "Completed" && styles.selected]} onPress={this.navigate.bind(this, "Completed")}>
-              <Image source={require('../ic_done_all_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
+              <Image source={require('../images/ic_done_all_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
               <Text style={styles.menuItemText}>Completed</Text>
             </TouchableOpacity>
           </View>
@@ -236,7 +236,7 @@ class ToDoContainer extends React.Component {
             renderNavigationView={() => navigationView}>
             <View style={{flex: 1}}>
               <ToolbarAndroid style={styles.navigator }
-                navIcon={require('../ic_menu_white_24dp/web/ic_menu_white_24dp_1x.png')}
+                navIcon={require('../images/ic_menu_white_24dp/web/ic_menu_white_24dp_1x.png')}
                 titleColor='#FFFFFF'
                 title={this.props.title}
                 contentInsetStart={72}
@@ -258,7 +258,7 @@ class ToDoContainer extends React.Component {
             <View style={styles.fabView}>
               <ColoredFab
               onPress={this.openItem}>
-                <Image pointerEvents="none" source={require('../plus.png')} style={{height: 24, width: 24}}/>
+                <Image pointerEvents="none" source={require('../images/plus.png')} style={{height: 24, width: 24}}/>
               </ColoredFab>
             </View>
           </DrawerLayoutAndroid>
