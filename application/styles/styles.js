@@ -43,21 +43,33 @@ var styles = StyleSheet.create({
       marginTop: 16,
     },
     menuItem:{
-
+      height: 55,
+      width: 300,
+      flexWrap: 'wrap',
+      alignItems: 'flex-start',
+      flexDirection:'row'
     },
 
     selected: {
-      backgroundColor: 'rgba(255, 64, 129, 0.2)',
+      backgroundColor: 'rgba(255, 64, 129, 0.15)',
     },
     menuItemText: {
-      color: '#222222',
-      margin: 10,
+      color: '#000000',
+      opacity: 0.87,
+      margin: 15,
+      marginLeft: 0,
       fontSize: 15,
-      height: 35,
-      width: 300,
+      flexDirection:'column',
       fontWeight: 'bold',
-      textAlign: 'left',
+      // textAlign: 'left',
       textAlignVertical: 'center'
+    },
+
+    menuItemIcon: {
+      margin: 14,
+      opacity: 0.60,
+      flexDirection:'column',
+      // textAlign: 'left',
     },
 
     container: {

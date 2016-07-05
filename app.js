@@ -2,7 +2,8 @@
 var styles = require('./application/styles/styles');
 var ToDoListContainer = require('./application/components/ToDoListContainer');
 var React = require('react-native');
-var { AppRegistry, Navigator, Text, Image, View, TouchableHighlight, DrawerLayoutAndroid} = React;
+var { AppRegistry, Navigator, Text, Image, View, TouchableHighlight, DrawerLayoutAndroid, StatusBar} = React;
+var {MKColor} = require('react-native-material-kit');
 
 
 
@@ -69,7 +70,12 @@ class ToDoApp extends React.Component {
       console.log("Route title: "+route_id)
       switch (route_id){
         case "Today":
-          return <route.component navigator={navigator} title= {route_id} {...route.passProps} />
+          return (
+            <View style={{flex:1}}>
+              <StatusBar hidden={route.statusBarHidden} />
+              <route.component navigator={navigator} title= {route_id} {...route.passProps} />
+            </View>
+          )
         case "All":
           return <route.component navigator={navigator} title= {route_id} {...route.passProps} />
         case "Tomorrow":
@@ -92,11 +98,17 @@ class ToDoApp extends React.Component {
     render() {
 
       return (
+        <View style={{flex:1}}>
+          <StatusBar
+            backgroundColor= '#512DA8'
+            barStyle="light-content"
+          />
           <Navigator
             configureScene={ this.configureScene }
             initialRoute={{component: ToDoListContainer, name: 'ToDos', title: "Today", id: "Today", index: 0}}
             renderScene={ this.renderScene }
           />
+        </View>
       );
     }
 }

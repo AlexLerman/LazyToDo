@@ -167,7 +167,9 @@ class ToDoContainer extends React.Component {
           })
           return filtered
         case "All":
-          return items
+          var filtered = _.where(items, {complete: false})
+          console.log(filtered)
+          return filtered
         case "Tomorrow":
           var today = (new Date()).addDays(1).roundedDay()
           var filtered = _.filter(items, function(i){
@@ -205,18 +207,24 @@ class ToDoContainer extends React.Component {
       selected = this.props.title
       var navigationView = (
           <View style={{flex: 1, backgroundColor: '#fff'}}>
-            <View style={{height: 100, backgroundColor: MKColor.DeepPurple}}/>
-            <TouchableOpacity style={[selected === "All" && styles.selected]} onPress={this.navigate.bind(this, "All")} >
+            <View style={{height: 100, backgroundColor: MKColor.DeepPurple}}>
+              <Text style={{fontSize: 30, color: '#fff', marginTop: 33, marginLeft: 14}}>LazyToDo</Text>
+            </View>
+            <TouchableOpacity style={[styles.menuItem, selected === "All" && styles.selected]} onPress={this.navigate.bind(this, "All")} >
+                <Image source={require('../ic_inbox_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>All</Text>
             </TouchableOpacity>
-            <TouchableOpacity  style={[selected === "Today" && styles.selected]} onPress={this.navigate.bind(this, "Today")}>
+            <TouchableOpacity  style={[styles.menuItem, selected === "Today" && styles.selected]} onPress={this.navigate.bind(this, "Today")}>
+                <Image source={require('../ic_today_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>Today</Text>
             </TouchableOpacity>
-            <TouchableOpacity  style={[selected === "Tomorrow" && styles.selected]} onPress={this.navigate.bind(this, "Tomorrow")}>
+            <TouchableOpacity  style={[styles.menuItem, selected === "Tomorrow" && styles.selected]} onPress={this.navigate.bind(this, "Tomorrow")}>
+                <Image source={require('../ic_redo_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>Tomorrow</Text>
             </TouchableOpacity>
-            <TouchableOpacity  style={[selected === "Completed" && styles.selected]} onPress={this.navigate.bind(this, "Completed")}>
-                <Text style={styles.menuItemText}>Completed</Text>
+            <TouchableOpacity  style={[styles.menuItem, selected === "Completed" && styles.selected]} onPress={this.navigate.bind(this, "Completed")}>
+              <Image source={require('../ic_done_all_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
+              <Text style={styles.menuItemText}>Completed</Text>
             </TouchableOpacity>
           </View>
       );

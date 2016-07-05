@@ -10,9 +10,13 @@ function formatDate(start, end){
     if (end.toDateString() === (new Date()).toDateString()){
       return "today"
     }
-    if (start.roundedDay == end.roundedDay){
+    if ((start.roundedDay() - end.roundedDay()) == 0){
       return "on " + month_names_short[end.getMonth()] + ' ' + end.getDate()
     }
+    console.log(start)
+    console.log(end)
+    console.log(start.roundedDay()- end.roundedDay())
+
     return "by " + month_names_short[end.getMonth()] + ' ' + end.getDate()
   }
   return ""
