@@ -83,9 +83,9 @@ class ToDoApp extends React.Component {
     }
 
     configureScene(route, routeStack){
-      if (route.title === "Today" || route.title === "Tomorrow" || route.title === "All" || route.title === "Completed"){
-        return () => {}
-      }
+      // if (route.title === "Today" || route.title === "Tomorrow" || route.title === "All" || route.title === "Completed"){
+      //   return () => {}
+      // }
       return Navigator.SceneConfigs.FadeAndroid
     }
 
