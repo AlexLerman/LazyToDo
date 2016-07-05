@@ -23,6 +23,7 @@ function dateReviver(key, value) {
   return value;
 };
 
+var selected
 
 const ColoredFab = MKButton.coloredFab().withStyle(styles.fab).build();
 
@@ -189,6 +190,7 @@ class ToDoContainer extends React.Component {
     }
 
     navigate(route_id){
+      selected = route_id
       console.log("navigate: " +  route_id)
       this.refs['DRAWER'].closeDrawer()
       this.props.navigator.push({
@@ -200,20 +202,21 @@ class ToDoContainer extends React.Component {
 
     render() {
       _navigator = this.props.navigator
-
+      selected = this.props.title
       var navigationView = (
           <View style={{flex: 1, backgroundColor: '#fff'}}>
-            <TouchableOpacity onPress={this.navigate.bind(this, "All")} >
-                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Inbox</Text>
+            <View style={{height: 100, backgroundColor: MKColor.DeepPurple}}/>
+            <TouchableOpacity style={[selected === "All" && styles.selected]} onPress={this.navigate.bind(this, "All")} >
+                <Text style={styles.menuItemText}>All</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.navigate.bind(this, "Today")}>
-                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Today</Text>
+            <TouchableOpacity  style={[selected === "Today" && styles.selected]} onPress={this.navigate.bind(this, "Today")}>
+                <Text style={styles.menuItemText}>Today</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.navigate.bind(this, "Tomorrow")}>
-                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Tomorrow</Text>
+            <TouchableOpacity  style={[selected === "Tomorrow" && styles.selected]} onPress={this.navigate.bind(this, "Tomorrow")}>
+                <Text style={styles.menuItemText}>Tomorrow</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.navigate.bind(this, "Completed")}>
-                <Text style={{margin: 10, fontSize: 15, textAlign: 'left'}}>Completed</Text>
+            <TouchableOpacity  style={[selected === "Completed" && styles.selected]} onPress={this.navigate.bind(this, "Completed")}>
+                <Text style={styles.menuItemText}>Completed</Text>
             </TouchableOpacity>
           </View>
       );

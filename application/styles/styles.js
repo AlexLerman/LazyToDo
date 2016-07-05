@@ -42,6 +42,23 @@ var styles = StyleSheet.create({
       marginBottom: 16,
       marginTop: 16,
     },
+    menuItem:{
+
+    },
+
+    selected: {
+      backgroundColor: 'rgba(255, 64, 129, 0.2)',
+    },
+    menuItemText: {
+      color: '#222222',
+      margin: 10,
+      fontSize: 15,
+      height: 35,
+      width: 300,
+      fontWeight: 'bold',
+      textAlign: 'left',
+      textAlignVertical: 'center'
+    },
 
     container: {
         flex: 1,
