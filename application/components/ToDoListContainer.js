@@ -111,17 +111,19 @@ class ToDoContainer extends React.Component {
         this._onValueChange(items)
     }
 
+
+
     updateItem(item, index) {
         var items = this.state.items;
-        console.log("Update Item at index: ")
-        console.log(index)
-        console.log(item)
         if (index) {
           console.log("replacing")
-          console.log(items[index])
+          // console.log(items[index])
+          index = _.findIndex(items, function(i){ return i.uuid === item.uuid})
           items[index] = item;
+          console.log(items[index])
+
         }else {
-          console.log("new item")
+          item.uuid = Date.now()
           items.push(item)
         }
         items.sort(function(a,b){
@@ -133,6 +135,12 @@ class ToDoContainer extends React.Component {
         this.setState({items: items_clone});
         this._onValueChange(items)
         this.props.navigator.pop();
+    }
+
+    clearData(){
+      for (var i = 0; i < this.state.items.length; i++) {
+        this.deleteItem(i)
+      }
     }
 
     openItem(rowData, rowID) {
@@ -257,7 +265,8 @@ class ToDoContainer extends React.Component {
             </View>
             <View style={styles.fabView}>
               <ColoredFab
-              onPress={this.openItem}>
+              onPress={this.openItem}
+              onLongPress={this.clearData.bind(this)}>
                 <Image pointerEvents="none" source={require('../images/plus.png')} style={{height: 24, width: 24}}/>
               </ColoredFab>
             </View>

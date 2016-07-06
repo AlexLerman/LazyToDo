@@ -91,9 +91,11 @@ class ToDoEdit extends React.Component {
 
     onUpdate() {
         var value = this.refs.form.getValue();
+        var item = this.props.item
 
         if (value) {
             var to_save = convertDate(value, selectedDate)
+            to_save.uuid=item.uuid
             this.props.update(to_save, this.props.id);
         }
     }
