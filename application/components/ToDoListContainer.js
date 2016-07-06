@@ -167,7 +167,7 @@ class ToDoContainer extends React.Component {
           return filtered
         case "All":
           var filtered = _.where(items, {complete: false})
-          console.log(filtered)
+          // console.log(filtered)
           return filtered
         case "Tomorrow":
           var today = (new Date()).addDays(1).roundedDay()
@@ -181,7 +181,7 @@ class ToDoContainer extends React.Component {
           return filtered
         case "Completed":
           var filtered = _.where(items, {complete: true})
-          console.log(filtered)
+          // console.log(filtered)
           return filtered
       }
     }

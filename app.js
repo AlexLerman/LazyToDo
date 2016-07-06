@@ -82,7 +82,6 @@ class ToDoApp extends React.Component {
 
     componentDidMount() {
       _emitter.addListener('openMenu', () => {
-        console.log(  this._drawer)
           this._drawer.openDrawer();
       });
     }
@@ -133,7 +132,8 @@ class ToDoApp extends React.Component {
                   component: ToDoListContainer,
                   passProps: {navigator: this._navigator, id: route_id, emitter: _emitter, selected: route_id }
       });
-      this._drawer.closeDrawer()
+      setTimeout(this._drawer.closeDrawer, 50);
+
 
     }
 
@@ -145,22 +145,30 @@ class ToDoApp extends React.Component {
             <View style={{height: 100, backgroundColor: MKColor.DeepPurple}}>
               <Text style={{fontSize: 30, color: '#fff', marginTop: 33, marginLeft: 14}}>LazyToDo</Text>
             </View>
-            <TouchableOpacity style={[styles.menuItem, this.state.selected === "All" && styles.selected]} onPress={this.navigate.bind(this, "All")} >
+            <TouchableHighlight underlayColor={'rgba(255, 64, 129, 0.15)'}  onPress={this.navigate.bind(this, "All")} >
+              <View style={[styles.menuItem, this.state.selected === "All" && styles.selected]}>
                 <Image source={require('./application/images/ic_inbox_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>All</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.menuItem, this.state.selected === "Today" && styles.selected]} onPress={this.navigate.bind(this, "Today")}>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight underlayColor={'rgba(255, 64, 129, 0.15)'} onPress={this.navigate.bind(this, "Today")}>
+              <View style={[styles.menuItem, this.state.selected === "Today" && styles.selected]} >
                 <Image source={require('./application/images/ic_today_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>Today</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.menuItem, this.state.selected === "Tomorrow" && styles.selected]} onPress={this.navigate.bind(this, "Tomorrow")}>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight underlayColor={'rgba(255, 64, 129, 0.15)'} onPress={this.navigate.bind(this, "Tomorrow")}>
+              <View style={[styles.menuItem, this.state.selected === "Tomorrow" && styles.selected]}>
                 <Image source={require('./application/images/ic_redo_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
                 <Text style={styles.menuItemText}>Tomorrow</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.menuItem, this.state.selected === "Completed" && styles.selected]} onPress={this.navigate.bind(this, "Completed")}>
-              <Image source={require('./application/images/ic_done_all_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
-              <Text style={styles.menuItemText}>Completed</Text>
-            </TouchableOpacity>
+              </View>
+            </TouchableHighlight>
+            <TouchableHighlight underlayColor={'rgba(255, 64, 129, 0.15)'} onPress={this.navigate.bind(this, "Completed")}>
+              <View style={[styles.menuItem, this.state.selected === "Completed" && styles.selected]}>
+                <Image source={require('./application/images/ic_done_all_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
+                <Text style={styles.menuItemText}>Completed</Text>
+              </View>
+            </TouchableHighlight>
           </View>
       );
       return (
