@@ -6,7 +6,7 @@ var ToDoEdit = require('./ToDoEdit');
 var MK = require('react-native-material-kit')
 var _ = require('underscore')
 
-var { Text, Image, View, ListView, TouchableHighlight, TouchableOpacity, AsyncStorage, AlertIOS, BackAndroid, ToolbarAndroid, DrawerLayoutAndroid } = React;
+var { Text, Image, View, ListView, TouchableHighlight, TouchableOpacity, AsyncStorage, AlertIOS, ToolbarAndroid, DrawerLayoutAndroid } = React;
 
 const {
   MKButton,
@@ -30,15 +30,7 @@ const ColoredFab = MKButton.coloredFab().withStyle(styles.fab).build();
 const TODOLIST = "TODOLIST"
 
 
-var _navigator = null; // we fill this up upon on first navigation.
 
-BackAndroid.addEventListener('hardwareBackPress', () => {
-  if (!_navigator || _navigator.getCurrentRoutes().length === 1  ) {
-     return false;
-  }
-  _navigator.pop();
-  return true;
-});
 
 class ToDoContainer extends React.Component {
 
@@ -144,11 +136,10 @@ class ToDoContainer extends React.Component {
     }
 
     openItem(rowData, rowID) {
-        _navigator = this.props.navigator
         this.props.navigator.push({
             title: rowData && rowData.txt || 'New Item',
             component: ToDoEdit,
-            passProps: {navigator: _navigator, item: rowData, id: rowID, update: this.updateItem}
+            passProps: {navigator: this.props.navigator, item: rowData, id: rowID, update: this.updateItem}
         });
     }
 
@@ -196,52 +187,13 @@ class ToDoContainer extends React.Component {
     }
 
     onActionSelected() {
-      this.refs['DRAWER'].openDrawer()
+      this.props.drawer.openDrawer()
     }
 
-    navigate(route_id){
-      selected = route_id
-      console.log("navigate: " +  route_id)
-      this.refs['DRAWER'].closeDrawer()
-      this.props.navigator.push({
-                  title: route_id,
-                  component: ToDoContainer,
-                  passProps: {navigator: _navigator, id: route_id}
-      });
-    }
 
     render() {
-      _navigator = this.props.navigator
-      selected = this.props.title
-      var navigationView = (
-          <View style={{flex: 1, backgroundColor: '#fff'}}>
-            <View style={{height: 100, backgroundColor: MKColor.DeepPurple}}>
-              <Text style={{fontSize: 30, color: '#fff', marginTop: 33, marginLeft: 14}}>LazyToDo</Text>
-            </View>
-            <TouchableOpacity style={[styles.menuItem, selected === "All" && styles.selected]} onPress={this.navigate.bind(this, "All")} >
-                <Image source={require('../images/ic_inbox_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
-                <Text style={styles.menuItemText}>All</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.menuItem, selected === "Today" && styles.selected]} onPress={this.navigate.bind(this, "Today")}>
-                <Image source={require('../images/ic_today_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
-                <Text style={styles.menuItemText}>Today</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.menuItem, selected === "Tomorrow" && styles.selected]} onPress={this.navigate.bind(this, "Tomorrow")}>
-                <Image source={require('../images/ic_redo_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
-                <Text style={styles.menuItemText}>Tomorrow</Text>
-            </TouchableOpacity>
-            <TouchableOpacity  style={[styles.menuItem, selected === "Completed" && styles.selected]} onPress={this.navigate.bind(this, "Completed")}>
-              <Image source={require('../images/ic_done_all_black_24dp_1x.png')} pointerEvents="none" style={styles.menuItemIcon}/>
-              <Text style={styles.menuItemText}>Completed</Text>
-            </TouchableOpacity>
-          </View>
-      );
         return (
-          <DrawerLayoutAndroid
-            drawerWidth={300}
-            ref={'DRAWER'}
-            drawerPosition={DrawerLayoutAndroid.positions.Left}
-            renderNavigationView={() => navigationView}>
+          <View style={{flex: 1}}>
             <View style={{flex: 1}}>
               <ToolbarAndroid style={styles.navigator }
                 navIcon={require('../images/ic_menu_white_24dp/web/ic_menu_white_24dp_1x.png')}
@@ -270,7 +222,7 @@ class ToDoContainer extends React.Component {
                 <Image pointerEvents="none" source={require('../images/plus.png')} style={{height: 24, width: 24}}/>
               </ColoredFab>
             </View>
-          </DrawerLayoutAndroid>
+          </View>
         );
     }
 
