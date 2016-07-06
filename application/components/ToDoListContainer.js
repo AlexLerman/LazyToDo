@@ -187,7 +187,8 @@ class ToDoContainer extends React.Component {
     }
 
     onActionSelected() {
-      this.props.drawer.openDrawer()
+      // _emitter.emit('openMenu')
+      this.props.emitter.emit('openMenu')
     }
 
 

@@ -7,8 +7,11 @@ console.log(Transitions.default)
 
 var React = require('react-native');
 var { AppRegistry, Navigator, Text, Image, View, TouchableOpacity, TouchableHighlight, DrawerLayoutAndroid, BackAndroid, StatusBar} = React;
-var {MKColor} = require('react-native-material-kit');
+var { EventEmitter } = require('fbemitter');
+var _emitter = new EventEmitter();
 
+
+var {MKColor} = require('react-native-material-kit');
 
 
 
@@ -66,6 +69,7 @@ var NavigationBarRouteMapper = {
 
 var _navigator; // we fill this up upon on first navigation.
 var selected = "Today"
+
 BackAndroid.addEventListener('hardwareBackPress', () => {
   if (!_navigator || _navigator.getCurrentRoutes().length === 1  ) {
      return false;
@@ -75,6 +79,15 @@ BackAndroid.addEventListener('hardwareBackPress', () => {
 });
 
 class ToDoApp extends React.Component {
+
+    componentDidMount() {
+      _emitter.addListener('openMenu', () => {
+        console.log(  this._drawer)
+          this._drawer.openDrawer();
+      });
+    }
+
+
 
     constructor(){
       super();
@@ -118,9 +131,9 @@ class ToDoApp extends React.Component {
       this._navigator.push({
                   title: route_id,
                   component: ToDoListContainer,
-                  passProps: {navigator: this._navigator, id: route_id, drawer: this.refs['DRAWER'], selected: route_id }
+                  passProps: {navigator: this._navigator, id: route_id, emitter: _emitter, selected: route_id }
       });
-      this.refs['DRAWER'].closeDrawer()
+      this._drawer.closeDrawer()
 
     }
 
@@ -158,13 +171,22 @@ class ToDoApp extends React.Component {
           />
           <DrawerLayoutAndroid
             drawerWidth={300}
-            ref={'DRAWER'}
+            ref={(ref) => {
+              this._drawer = ref}
+            }
             drawerPosition={DrawerLayoutAndroid.positions.Left}
             renderNavigationView={() => navigationView}>
             <Navigator
               ref={(ref) => this._navigator = ref}
               configureScene={ this.configureScene }
-              initialRoute={{component: ToDoListContainer, name: 'ToDos', title: "Today", id: "Today", index: 0}}
+              initialRoute={{
+                component: ToDoListContainer,
+                name: 'ToDos',
+                title: "Today",
+                id: "Today",
+                index: 0,
+                passProps: {emitter: _emitter}
+                }}
               renderScene={ this.renderScene }
             />
           </DrawerLayoutAndroid>
