@@ -132,8 +132,7 @@ class ToDoApp extends React.Component {
                   component: ToDoListContainer,
                   passProps: {navigator: this._navigator, id: route_id, emitter: _emitter, selected: route_id }
       });
-      setTimeout(this._drawer.closeDrawer, 50);
-
+      setTimeout(this._drawer.closeDrawer, 5);
 
     }
 
